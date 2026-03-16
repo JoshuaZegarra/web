@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoreo de Indicadores de Anemia - DIRIS Lima Norte</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 2px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 0 0 10px 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: #f0f2f5;
+            color: #667eea;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .breadcrumb a {
+            text-decoration: none;
+            color: #667eea;
+        }
+
+        .breadcrumb span {
+            color: #718096;
+            margin: 0 5px;
+        }
+
+        /* Filters */
+        .filters {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-item label {
+            font-size: 12px;
+            color: #718096;
+            margin-bottom: 5px;
+        }
+
+        .filter-item select {
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .stat-percentage {
+            font-size: 14px;
+            color: #48bb78;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-subtitle {
+            font-size: 12px;
+            color: #a0aec0;
+        }
+
+        /* Production Section */
+        .production-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .production-title {
+            font-size: 18px;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .production-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .production-item {
+            text-align: center;
+        }
+
+        .production-label {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #edf2f7;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            border-radius: 10px;
+            width: 100%;
+        }
+
+        .progress-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        /* Results Section */
+        .results-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .results-title {
+            font-size: 18px;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .anemia-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .anemia-item {
+            background-color: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .anemia-badge {
+            width: 100%;
+            height: 40px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #f56565 0%, #f56565 70%, #cbd5e0 70%);
+        }
+
+        .anemia-badge.anemia {
+            background: linear-gradient(90deg, #f56565 0%, #f56565 100%);
+        }
+
+        .anemia-badge.no-anemia {
+            background: linear-gradient(90deg, #48bb78 0%, #48bb78 100%);
+        }
+
+        .anemia-badge.mixed {
+            background: linear-gradient(90deg, #f56565 0%, #f56565 50%, #48bb78 50%);
+        }
+
+        .anemia-text {
+            font-size: 14px;
+            color: #4a5568;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>MONITOREO DE INDICADORES DE ANEMIA - DIRIS LIMA NORTE</h1>
+            <div class="header-subtitle">Sistema de Monitoreo y Evaluación</div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-bar">
+            <ul class="nav-links">
+                <li><a href="#">Anemia</a></li>
+                <li><a href="#">CRED Recién Nacido</a></li>
+                <li><a href="#">CRED Menor de 01 año</a></li>
+                <li><a href="#">Inmunizaciones</a></li>
+                <li><a href="#">Adolescentes</a></li>
+                <li><a href="#">Campañas</a></li>
+                <li><a href="#">Producción</a></li>
+                <li><a href="#">Seguimiento</a></li>
+                <li><a href="#">Mantenimiento</a></li>
+            </ul>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="#">Inicio</a>
+            <span>/</span>
+            <span>estadística anemia</span>
+        </div>
+
+        <!-- Title -->
+        <h2 style="margin-bottom: 20px; color: #2d3748;">Monitoreo de Indicadores de Anemia - Diris Lima Norte</h2>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-item">
+                <label>AÑO</label>
+                <select>
+                    <option>Todas</option>
+                    <option>2024</option>
+                    <option>2023</option>
+                    <option>2022</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <label>MES</label>
+                <select>
+                    <option>Todas</option>
+                    <option>Enero</option>
+                    <option>Febrero</option>
+                    <option>Marzo</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <label>RIS</label>
+                <select>
+                    <option>Todas</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <label>DISTRITO</label>
+                <select>
+                    <option>Todas</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <label>EESS</label>
+                <select>
+                    <option>Todas</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <!-- Total Evaluados -->
+            <div class="stat-card">
+                <div class="stat-title">Total de niñas y niños Evaluados en el Periodo</div>
+                <div class="stat-value">54,429</div>
+                <div class="stat-subtitle">De los niños de 0 a 11m</div>
+                <div class="stat-percentage">↑ 96.22%</div>
+            </div>
+
+            <!-- Total 0-11m -->
+            <div class="stat-card">
+                <div class="stat-title">Total niñas y niños de 0 a 11m</div>
+                <div class="stat-value">56,570</div>
+            </div>
+
+            <!-- Dosaje Hemoglobina -->
+            <div class="stat-card">
+                <div class="stat-title">Total con dosaje de hemoglobina</div>
+                <div class="stat-value">27,007</div>
+                <div class="stat-percentage">49.62%</div>
+                <div class="stat-subtitle">Sin registro Hb: 21,402</div>
+            </div>
+
+            <!-- Niños 6-11m -->
+            <div class="stat-card">
+                <div class="stat-title">Total de niñas y niños de 06 a 11m</div>
+                <div class="stat-value">44,404</div>
+                <div class="stat-percentage">8.09%</div>
+            </div>
+
+            <!-- Sin Anemia -->
+            <div class="stat-card">
+                <div class="stat-title">Total sin Anemia</div>
+                <div class="stat-value">47,884</div>
+                <div class="stat-percentage">87.98%</div>
+            </div>
+
+            <!-- Sin Evaluación -->
+            <div class="stat-card">
+                <div class="stat-title">Total sin evaluación</div>
+                <div class="stat-value">2,141</div>
+                <div class="stat-percentage">3.93%</div>
+            </div>
+
+            <!-- Recuperados -->
+            <div class="stat-card">
+                <div class="stat-title">Total recuperados</div>
+                <div class="stat-value">4,173</div>
+                <div class="stat-percentage">7.67%</div>
+            </div>
+        </div>
+
+        <!-- Production Section -->
+        <div class="production-section">
+            <div class="production-title">Producción</div>
+            <div class="production-grid">
+                <div class="production-item">
+                    <div class="production-label">SEGURIDAD ANEMIA</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <div class="progress-text">100%</div>
+                </div>
+                <div class="production-item">
+                    <div class="production-label">SEGURIDAD HEMOGLOBINA</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <div class="progress-text">100%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section">
+            <div class="results-title">Resultados de Evaluación para Diagnóstico de Anemia</div>
+            <div class="anemia-grid">
+                <div class="anemia-item">
+                    <div class="anemia-badge anemia"></div>
+                    <div class="anemia-text">CON ANEMIA</div>
+                </div>
+                <div class="anemia-item">
+                    <div class="anemia-badge no-anemia"></div>
+                    <div class="anemia-text">SIN ANEMIA</div>
+                </div>
+                <div class="anemia-item">
+                    <div class="anemia-badge mixed"></div>
+                    <div class="anemia-text">CON ANEMIA = SIN ANEMIA</div>
+                </div>
+                <div class="anemia-item">
+                    <div class="anemia-badge mixed"></div>
+                    <div class="anemia-text">CON ANEMIA = CON ANEMIA</div>
+                </div>
+                <div class="anemia-item">
+                    <div class="anemia-badge mixed"></div>
+                    <div class="anemia-text">CON ANEMIA = NO CON ANEMIA</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
